@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "697044943623",
+    "firebase_url": "https://esbayeni-daa9b.firebaseio.com",
+    "project_id": "esbayeni-daa9b",
+    "storage_bucket": "esbayeni-daa9b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697044943623:android:b9320aebfc848c25",
+        "android_client_info": {
+          "package_name": "com.android.esbayeni"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697044943623-omsoipg1ssohb4ksetbonluso3t488t2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAh65zmCmpdcHJqnFNJj86by0_OL_m7QEs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
