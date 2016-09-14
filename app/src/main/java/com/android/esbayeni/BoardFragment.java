@@ -11,7 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.android.esbayeni.model.Board;
+import com.android.esbayeni.model.Route;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -24,12 +33,11 @@ public class BoardFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+    public RecyclerView.Adapter adapter;
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-
-    private List<Board> boards;
-
+    private List<Board> boards = new ArrayList<Board>();
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -61,6 +69,8 @@ public class BoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_board_list, container, false);
 
+        adapter = new MyBoardRecyclerViewAdapter(boards);
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -70,8 +80,12 @@ public class BoardFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyBoardRecyclerViewAdapter(boards));
+            recyclerView.setAdapter(adapter);
         }
+
+        getBoard(ParseUser.getCurrentUser());
+
+
         return view;
     }
 
@@ -93,6 +107,71 @@ public class BoardFragment extends Fragment {
         mListener = null;
     }
 
+    public void getBoard(ParseUser user) {
+        Route route = (Route) user.getParseObject("route");
+        final ParseQuery<Board> board_query = ParseQuery.getQuery(Board.class);
+        board_query.whereEqualTo("route", route);
+        board_query.whereGreaterThan("createdAt", getCurrentDayMidnightDateStamp().getTime());
+        board_query.findInBackground(new FindCallback<Board>() {
+            @Override
+            public void done(final List<Board> list, ParseException e) {
+                if (e == null) {
+                    //Queried Remote Data store Successfully
+                    if (list.size() > 0) {
+                        //Save all results to local data store
+                        Board.pinAllInBackground(list, new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    //Pinned all results to local data store
+                                    boards.clear();
+                                    boards.addAll(list);
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    //Failed to pin all results
+
+                                }
+                            }
+                        });
+                    } else {
+                        //No records found remotely. Create New Records
+                    }
+                } else {
+                    //Failed to query remote date store
+                    //Changing query data store location from remote to local datastore
+                    board_query.fromLocalDatastore();
+                    board_query.findInBackground(new FindCallback<Board>() {
+                        @Override
+                        public void done(List<Board> list, ParseException e) {
+                            if (e == null) {
+                                //Queried Local Data store Successfully
+                                if (list.size() > 0) {
+                                    //Recieved Legitimate result set
+                                    boards.clear();
+                                    boards.addAll(list);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                //Failed to Query local datastore, too
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public Calendar getCurrentDayMidnightDateStamp() {
+        // today
+        Calendar date = new GregorianCalendar();
+        // reset hour, minutes, seconds and millis
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        return date;
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -107,4 +186,5 @@ public class BoardFragment extends Fragment {
         // TODO: Update argument type and name
         void onListFragmentInteraction(Board item);
     }
+
 }
