@@ -8,13 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import com.android.esbayeni.model.Association;
 import com.android.esbayeni.model.Route;
+import com.android.esbayeni.model.TaxiMarshall;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +28,12 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class SaveAssociationFragment extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM1 = "email";
     private Spinner mAssociationSpinner, mRouteSpinner;
+    private Button btnNext;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -40,20 +44,11 @@ public class SaveAssociationFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SaveAssociationFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static SaveAssociationFragment newInstance(String param1, String param2) {
         SaveAssociationFragment fragment = new SaveAssociationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +58,6 @@ public class SaveAssociationFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -74,6 +68,7 @@ public class SaveAssociationFragment extends Fragment {
 
         mAssociationSpinner = (Spinner) v.findViewById(R.id.association_spinner);
         mRouteSpinner = (Spinner) v.findViewById(R.id.route_spinner);
+        btnNext = (Button) v.findViewById(R.id.proceed);
 
         getAssociationList();
         return v;
@@ -98,9 +93,9 @@ public class SaveAssociationFragment extends Fragment {
 
         mAssociationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, final int _position, long id) {
                 List<String> _lables = new ArrayList<String>();
-                for (Route route : list.get(position).getRoutes()) {
+                for (Route route : list.get(_position).getRoutes()) {
                     _lables.add(route.getRouteName());
                 }
 
@@ -115,6 +110,26 @@ public class SaveAssociationFragment extends Fragment {
                 // attaching data adapter to spinner
                 mRouteSpinner.setAdapter(_spinnerAdapter);
                 mRouteSpinner.setVisibility(View.VISIBLE);
+
+                mRouteSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, final int position, long id) {
+                        btnNext.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                TaxiMarshall marshall = (TaxiMarshall) ParseUser.getCurrentUser();
+                                marshall.setAssociation(list.get(_position));
+                                marshall.setRoute(list.get(position).getRoutes().get(position));
+                                marshall.pinInBackground();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
             }
 
             @Override
