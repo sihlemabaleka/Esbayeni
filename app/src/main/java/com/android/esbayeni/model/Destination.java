@@ -26,4 +26,12 @@ public class Destination extends ParseObject {
         put("destination_coordinates", value);
     }
 
+    public Association getVehicleAssociation() {
+        return (Association) getParseObject("association");
+    }
+
+    public void setVehicleAssociation(Association value) {
+        put("association", value);
+    }
+
 }

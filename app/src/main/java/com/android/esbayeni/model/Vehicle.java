@@ -17,4 +17,12 @@ public class Vehicle extends ParseObject {
         put("vehicle_registration", value);
     }
 
+    public Association getVehicleAssociation() {
+        return (Association) getParseObject("association");
+    }
+
+    public void setVehicleAssociation(Association value) {
+        put("association", value);
+    }
+
 }

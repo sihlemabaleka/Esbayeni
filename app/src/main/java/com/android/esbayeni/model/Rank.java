@@ -27,4 +27,12 @@ public class Rank extends ParseObject {
         return getParseGeoPoint("rank_coordinates");
     }
 
+    public Association getVehicleAssociation() {
+        return (Association) getParseObject("association");
+    }
+
+    public void setVehicleAssociation(Association value) {
+        put("association", value);
+    }
+
 }

@@ -29,4 +29,12 @@ public class Route extends ParseObject {
     public String getRouteName() {
         return getString("route_name");
     }
+
+    public Association getVehicleAssociation() {
+        return (Association) getParseObject("association");
+    }
+
+    public void setVehicleAssociation(Association value) {
+        put("association", value);
+    }
 }
