@@ -121,6 +121,7 @@ public class SaveAssociationFragment extends Fragment {
                                 marshall.setAssociation(list.get(_position));
                                 marshall.setRoute(list.get(position).getRoutes().get(position));
                                 marshall.pinInBackground();
+
                             }
                         });
                     }
