@@ -1,4 +1,4 @@
-package com.android.esbayeni;
+package com.android.esbayeni.login;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.esbayeni.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;

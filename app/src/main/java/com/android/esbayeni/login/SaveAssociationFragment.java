@@ -1,4 +1,4 @@
-package com.android.esbayeni;
+package com.android.esbayeni.login;
 
 
 import android.app.Fragment;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.android.esbayeni.R;
 import com.android.esbayeni.model.Association;
 import com.android.esbayeni.model.Route;
 import com.android.esbayeni.model.TaxiMarshall;

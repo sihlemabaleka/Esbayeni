@@ -1,4 +1,4 @@
-package com.android.esbayeni;
+package com.android.esbayeni.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -31,6 +31,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.esbayeni.BoardActivity;
+import com.android.esbayeni.R;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;

@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.esbayeni.login.LoginActivity;
 import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
